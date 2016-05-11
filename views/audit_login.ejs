@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <% include audit_header.ejs %>
+  </head>
+  <body style="background:#F7F7F7;">
+    <div class="">
+      <a class="hiddenanchor" id="toregister"></a>
+      <a class="hiddenanchor" id="tologin"></a>
+
+      <div id="wrapper">
+        <div id="login" class=" form">
+          <section class="login_content">
+            <form>
+              <h1>审计系统登录</h1>
+              <div>
+                <input type="text" class="form-control" placeholder="用户名" required="" />
+              </div>
+              <div>
+                <input type="password" class="form-control" placeholder="密码" required="" />
+              </div>
+              <div>
+                <a class="btn btn-default submit" href="index.html">Log in</a>
+                <a class="reset_pass" href="#">Lost your password?</a>
+              </div>
+              <div class="clearfix"></div>
+              <div class="separator">
+                <h1><i class="fa fa-paw" style="font-size: 26px;"></i> PayKitty</h1>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </div>
+    <% include audit_footer.ejs %>
+  </body>
+</html>
