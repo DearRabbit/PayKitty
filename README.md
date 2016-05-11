@@ -12,7 +12,7 @@ After cloning, run
 ```
 npm install
 ```
-About 'dependencies' in package.json, see[packagejson](http://javascript.ruanyifeng.com/nodejs/packagejson.html#toc2).
+About 'dependencies' in package.json, see [packagejson](http://javascript.ruanyifeng.com/nodejs/packagejson.html#toc2).
 
 #Running
 ```
