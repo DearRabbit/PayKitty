@@ -41,12 +41,22 @@ router.get('/logout', function(req, res) {
   return res.redirect('./login');
 });
 
+var data = [
+  {id: 0, buyer: 'buy01', seller: 'sell01', status: '未发货', money: 10.02, audit: '正常'},
+  {id: 1, buyer: 'buy02', seller: 'sell01', status: '已发货', money: 9999.99, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+  {id: 2, buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, audit: '正常'},
+];
 router.get('/home', function(req, res, next) {
-  var data = [
-  {id: 0, buyer: 'buy01', seller: 'sell01', money: 10.02},
-  {id: 1, buyer: 'buy02', seller: 'sell01', money: 9999.99},
-  {id: 2, buyer: 'buy02', seller: 'sell02', money: 0.01},
-  ];
   res.render('audit_home', { title: 'Home', data: data } );
 });
 
