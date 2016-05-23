@@ -1,0 +1,29 @@
+<table id="datatable" class="table table-striped table-bordered">
+  <thead>
+  <tr>
+    <th>订单号</th>
+    <th>买家ID</th>
+    <th>卖家ID</th>
+    <th>订单状态</th>
+    <th>交易金额</th>
+    <th>审核状态</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% for (var i in data) { %>
+  <tr>
+    <td><a href="getInfo?id=<%= data[i].id %>"><%= data[i].id %></a></td>
+    <td><%= data[i].buyer %></td>
+    <td><%= data[i].seller %></td>
+    <td><%= data[i].status %></td>
+    <td><%= data[i].money %></td>
+    <td <% if (data[i].audit == "警告") {%>
+      style="background:#FDFBAF;" <%} else if (data[i].audit == "错误") {%>
+      style="background:#EE6D66;" <%}%>>
+      <%= data[i].audit %>
+    </td>
+  </tr>
+  <% } %>
+  </tbody>
+</table>

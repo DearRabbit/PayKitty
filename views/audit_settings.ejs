@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <% include audit_header.ejs %>
+    <link rel="stylesheet" href="css/switchery.min.css">
+  </head>
+  <body class="nav-md">
+  <div class="container body">
+    <div class="main_container">
+      <% include audit_common.ejs%>
+
+      <div class="right_col" role="main">
+        <div class="">
+
+          <!-- title -->
+          <div class="page-title">
+            <div class="title_left">
+              <h3>
+                系统设置
+              </h3>
+            </div>
+            <div class="title_right">
+              <h1>&nbsp;</h1>
+            </div>
+          </div>
+          <!-- title -->
+          <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+              <div class="x_panel">
+
+                <!--SubTitle-->
+                <div class="x_title">
+                  <h2></h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <!--Content-->
+                <div>
+                  <br />
+                  <form class="form-horizontal form-label-left">
+
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">金额下限</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input type="text" class="form-control" placeholder="<%= minValue%>" <%if (minValue<0){%>disabled="disabled"<%}%>>
+                      </div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">金额过大检查</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="">
+                          <label>
+                            <input name="" type="checkbox" class="js-switch" <%if (minValue>=0){%>checked<%}%> />
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="ln_solid"></div>
+                    <div class="form-group">
+                      <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                        <button type="submit" class="btn btn-primary">取消</button>
+                        <button type="submit" class="btn btn-success">提交</button>
+                      </div>
+                    </div>
+
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <% include audit_footer.ejs%>
+    </div>
+  </div>
+  <% include audit_footjs.ejs %>
+  <script src="js/switchery.min.js"></script>
+  <script src="js/icheck.min.js"></script>
+  </body>
+</html>
