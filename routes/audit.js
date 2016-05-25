@@ -120,19 +120,19 @@ router.get('/home', function(req, res, next) {
       cnt++;
     }
   }
-  res.render('audit_home', { title: 'Home', data: localdata,  date: localstring} );
+  res.render('audit_home', { title: 'Home', username: 'admin', data: localdata,  date: localstring} );
 });
 
 router.get('/archive', function(req, res, next) {
-  res.render('audit_archive', { title: 'Archive', data: data } );
+  res.render('audit_archive', { title: 'Archive', username: 'admin', data: data } );
 });
 
 router.get('/log', function(req, res, next) {
-  res.render('audit_log', { title: 'Log', data: log } );
+  res.render('audit_log', { title: 'Log', username: 'admin', data: log } );
 });
 
 router.get('/profile', function(req, res, next) {
-  res.render('audit_profile', { title: 'Profile'} );
+  res.render('audit_profile', { title: 'Profile', username: 'admin'} );
 });
 
 router.get('/settings', function(req, res, next) {
@@ -142,7 +142,7 @@ router.get('/settings', function(req, res, next) {
   } else {
     minValue = placeholder;
   }
-  res.render('audit_settings', { title: 'Settings', minValue: minValue} );
+  res.render('audit_settings', { title: 'Settings', username: 'admin', minValue: minValue} );
 });
 
 router.get('/getInfo', function(req, res, next) {
@@ -161,7 +161,7 @@ router.get('/getInfo', function(req, res, next) {
       }
     }
   }
-  res.render('audit_info', { title: 'Settings', info: infoData} );
+  res.render('audit_info', { title: 'Settings', username: 'admin', info: infoData} );
 });
 
 router.post('/getInfo', function(req, res, next) {
@@ -178,29 +178,7 @@ router.post('/getInfo', function(req, res, next) {
   }
   // query:
   // select id,xxxx,xxxx from xx_table where id = xxx;
-  res.render('audit_info', { title: 'Settings', info: infoData} );
-});
-
-router.get('/test', function(req, res, next) {
-
-  conn.getConnection(function (err, conn) {
-    if (err) console.log("POOL ==> " + err);
-
-    conn.query(sqlSet.queryTest, function(err,rows){
-      if (err) {
-        console.log(err);
-      }
-      else {
-        if (rows) {
-          console.log('no result');
-        }
-        else {
-          console.log(rows);
-        }
-      }
-      conn.release();
-    });
-  });
+  res.render('audit_info', { title: 'Settings', username: 'admin', info: infoData} );
 });
 
 module.exports = router;
