@@ -1,7 +1,7 @@
 var express = require('express');
 var path = require('path');
 
-//var conn = require('../database/connect');
+var conn = require('../database/connect');
 var router = express.Router();
 
 var data = [
@@ -35,11 +35,18 @@ var log = [
   {id: 2, modifyTime: '2016-01-12', msg: '订单状态修改: 已付款 -> 未付款'},
 ];
 
+var sqlSet =  {
+  auditUser: "select Password_md5, Salt from managers where user = ? and ManagerType = 3",
+  queryByDate: "select xx from xx_table where time = ?",
+  queryByDateRange: "select xx from xx_table where time < ? and time > ?",
+
+  queryTest: "select * from UserAccount",
+};
 var limit = 5000;
 
 router.use(express.static(path.join(__dirname, '../public')));
 router.use(function(req, res, next) {
-  if (!req.session.user && req.url != "/login") {
+  if (!req.session.auditUser && req.url != "/login") {
     return res.redirect('./login');
   }
   next();
@@ -47,30 +54,44 @@ router.use(function(req, res, next) {
 
 router.get('/login', function(req, res, next) {
   var loginFailFlag = false;
-  if (req.session.loginFailFlag == true) {
+  if (req.session.auditLoginFail == true) {
     loginFailFlag = true;
-    req.session.loginFailFlag = false;
+    req.session.auditLoginFail = false;
   }
   res.render('audit_login', { title: 'Login', login_fail: loginFailFlag});
 });
 
 router.post('/login', function(req, res, next) {
-  var testCase = {
-    username: 'admin',
-    password: 'admin',
-  };
-  if(req.body.username === testCase.username && req.body.password === testCase.password){
-    req.session.user = testCase.username;
+  var loginFailFlag = false;
+  conn.getConnection(function (err, conn) {
+    if (err) console.log("POOL ==> " + err);
+
+    conn.query(sqlSet.auditUser, [req.body.username], function(err,rows){
+      if (err) {
+        console.log(err);
+      }
+      // TODO: fix validation
+      else if (!rows && rows[0].Password_md5 == req.body.password) {
+        console.log(rows);
+        loginFailFlag = true;
+      }
+      conn.release();
+    });
+  });
+  // query user from db
+  // select username, salt, pwd from xxx_table where username == xxx;
+  if(loginFailFlag){
+    req.session.auditUser = req.body.username;
     return res.redirect('./home');
   } else {
-    req.session.loginFailFlag = true;
-    req.session.user = null;
+    req.session.auditLoginFail = true;
+    req.session.auditUser = null;
     return res.redirect('./login');
   }
 });
 
 router.get('/logout', function(req, res) {
-  req.session.user = null;
+  req.session.auditUser = null;
   return res.redirect('./login');
 });
 
@@ -80,6 +101,7 @@ router.get('/home', function(req, res, next) {
 
   var localdata = [];
   var cnt = 0;
+
   for (var i in data){
     if (data[i].b2a != data[i].money || data[i].a2s != data[i].money) {
       data[i].audit = "错误";
@@ -138,10 +160,11 @@ router.get('/getInfo', function(req, res, next) {
   }
   res.render('audit_info', { title: 'Settings', info: infoData} );
 });
+
 router.post('/getInfo', function(req, res, next) {
   var infoData;
-  console.log(req.body.id);
-  console.log(req.body.money);
+
+  // change
   for (var i in data) {
     if (data[i].id == req.body.id) {
       data[i].money = req.body.money;
@@ -150,7 +173,31 @@ router.post('/getInfo', function(req, res, next) {
       infoData = data[i];
     }
   }
+  // query:
+  // select id,xxxx,xxxx from xx_table where id = xxx;
   res.render('audit_info', { title: 'Settings', info: infoData} );
+});
+
+router.get('/test', function(req, res, next) {
+
+  conn.getConnection(function (err, conn) {
+    if (err) console.log("POOL ==> " + err);
+
+    conn.query(sqlSet.queryTest, function(err,rows){
+      if (err) {
+        console.log(err);
+      }
+      else {
+        if (rows) {
+          console.log('no result');
+        }
+        else {
+          console.log(rows);
+        }
+      }
+      conn.release();
+    });
+  });
 });
 
 module.exports = router;
