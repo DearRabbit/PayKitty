@@ -36,7 +36,7 @@ var log = [
 ];
 
 var sqlSet =  {
-  auditUser: "select Password_md5, Salt from managers where user = ? and ManagerType = 3",
+  auditUser: "select Password_md5, Salt from managers where AccountName = ? and ManagerType = 3",
   queryByDate: "select xx from xx_table where time = ?",
   queryByDateRange: "select xx from xx_table where time < ? and time > ?",
 
