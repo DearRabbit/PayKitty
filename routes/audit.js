@@ -37,10 +37,11 @@ var log = [
 
 var sqlSet =  {
   auditUser: "select Password_md5, Salt from managers where AccountName = ? and ManagerType = 3",
+  auditUserPro: "select * from managers where AccountName = ?",
+
   queryByDate: "select xx from xx_table where time = ?",
   queryByDateRange: "select xx from xx_table where time < ? and time > ?",
 
-  queryTest: "select * from UserAccount",
 };
 var limit = 5000;
 
@@ -120,19 +121,39 @@ router.get('/home', function(req, res, next) {
       cnt++;
     }
   }
-  res.render('audit_home', { title: 'Home', username: 'admin', data: localdata,  date: localstring} );
+  res.render('audit_home', { title: 'Home', username: req.session.auditUser, data: localdata, date: localstring} );
 });
 
 router.get('/archive', function(req, res, next) {
-  res.render('audit_archive', { title: 'Archive', username: 'admin', data: data } );
+  res.render('audit_archive', { title: 'Archive', username: req.session.auditUser, data: data } );
 });
 
 router.get('/log', function(req, res, next) {
-  res.render('audit_log', { title: 'Log', username: 'admin', data: log } );
+  res.render('audit_log', { title: 'Log', username: req.session.auditUser, data: log } );
 });
 
 router.get('/profile', function(req, res, next) {
-  res.render('audit_profile', { title: 'Profile', username: 'admin'} );
+  conn.getConnection(function (err, conn) {
+    if (err) {
+      console.log("POOL ==> " + err);
+    }
+
+    else {
+      conn.query(sqlSet.auditUserPro, [req.session.auditUser], function(err,rows){
+        if (err) {
+          console.log(err);
+        }
+        // TODO: fix validation
+        else {
+          var profile = rows[0];
+        }
+        console.log(rows);
+        conn.release();
+
+        return res.render('audit_profile', { title: 'Profile', username: req.session.auditUser, profile: profile} );
+      });
+    }
+  });
 });
 
 router.get('/settings', function(req, res, next) {
@@ -142,7 +163,7 @@ router.get('/settings', function(req, res, next) {
   } else {
     minValue = placeholder;
   }
-  res.render('audit_settings', { title: 'Settings', username: 'admin', minValue: minValue} );
+  res.render('audit_settings', { title: 'Settings', username: req.session.auditUser, minValue: minValue} );
 });
 
 router.get('/getInfo', function(req, res, next) {
@@ -161,7 +182,7 @@ router.get('/getInfo', function(req, res, next) {
       }
     }
   }
-  res.render('audit_info', { title: 'Settings', username: 'admin', info: infoData} );
+  res.render('audit_info', { title: 'Settings', username: req.session.auditUser, info: infoData} );
 });
 
 router.post('/getInfo', function(req, res, next) {
@@ -178,7 +199,7 @@ router.post('/getInfo', function(req, res, next) {
   }
   // query:
   // select id,xxxx,xxxx from xx_table where id = xxx;
-  res.render('audit_info', { title: 'Settings', username: 'admin', info: infoData} );
+  res.render('audit_info', { title: 'Settings', username: req.session.auditUser, info: infoData} );
 });
 
 module.exports = router;
