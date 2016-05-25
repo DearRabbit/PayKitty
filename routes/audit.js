@@ -72,9 +72,9 @@ router.post('/login', function(req, res, next) {
       }
       // TODO: fix validation
       else if (!rows && rows[0].Password_md5 == req.body.password) {
-        console.log(rows);
         loginFailFlag = true;
       }
+      console.log(rows);
       conn.release();
     });
   });
