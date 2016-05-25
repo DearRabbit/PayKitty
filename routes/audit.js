@@ -64,30 +64,33 @@ router.get('/login', function(req, res, next) {
 router.post('/login', function(req, res, next) {
   var loginFailFlag = false;
   conn.getConnection(function (err, conn) {
-    if (err) console.log("POOL ==> " + err);
+    if (err) {
+      console.log("POOL ==> " + err);
+    }
 
-    conn.query(sqlSet.auditUser, [req.body.username], function(err,rows){
-      if (err) {
-        console.log(err);
-      }
-      // TODO: fix validation
-      else if (!rows && rows[0].Password_md5 == req.body.password) {
-        loginFailFlag = true;
-      }
-      console.log(rows);
-      conn.release();
-    });
+    else {
+      conn.query(sqlSet.auditUser, [req.body.username], function(err,rows){
+        if (err) {
+          console.log(err);
+        }
+        // TODO: fix validation
+        else if (rows && rows[0].Password_md5 == req.body.password) {
+          loginFailFlag = true;
+        }
+        console.log(rows);
+        conn.release();
+
+        if(loginFailFlag){
+          req.session.auditUser = req.body.username;
+          return res.redirect('./home');
+        } else {
+          req.session.auditLoginFail = true;
+          req.session.auditUser = null;
+          return res.redirect('./login');
+        }
+      });
+    }
   });
-  // query user from db
-  // select username, salt, pwd from xxx_table where username == xxx;
-  if(loginFailFlag){
-    req.session.auditUser = req.body.username;
-    return res.redirect('./home');
-  } else {
-    req.session.auditLoginFail = true;
-    req.session.auditUser = null;
-    return res.redirect('./login');
-  }
 });
 
 router.get('/logout', function(req, res) {
