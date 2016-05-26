@@ -35,6 +35,8 @@ var sqlSet =  {
   auditUser: "select Password_md5, Salt from managers where AccountName = ? and ManagerType = 3",
   auditUserPro: "select * from managers where AccountName = ?",
   auditLog: "select * from modifyLog",
+
+  addAuditLog: "insert into modifyLog values(?, ?, ?)",
 };
 
 var limit = 5000;
@@ -238,22 +240,48 @@ router.get('/getInfo', function(req, res, next) {
 
 router.post('/getInfo', function(req, res, next) {
   var infoData;
-
+  var msg = "";
   // change
   for (var i in data) {
     if (data[i].id == req.query.id) {
-      if (req.body.money)
+      if (req.body.money) {
+        msg += ("商品金额: " + data[i].money + "元 -> " + req.body.money + "元");
         data[i].money = req.body.money;
-      if (req.body.b2a)
+      }
+      if (req.body.b2a) {
+        msg += ("买家付款金额: " + data[i].b2a + "元 -> " + req.body.b2a + "元");
         data[i].b2a = req.body.b2a;
-      if (req.body.a2s)
+      }
+      if (req.body.a2s) {
+        msg += ("卖家收款金额: " + data[i].a2s + "元 -> " + req.body.a2s + "元");
         data[i].a2s = req.body.a2s;
+      }
+
       infoData = data[i];
-      
+
+      conn.getConnection(function (err, conn) {
+        if (err) {
+          console.log("POOL ==> " + err);
+        }
+
+        else {
+          conn.query(sqlSet.addAuditLog, [data[i].id, new Date(), msg], function(err,rows){
+            if (err) {
+              console.log(err);
+            }
+            // TODO: fix validation
+
+            console.log(rows);
+            conn.release();
+
+            return res.redirect('./getInfo?id='+data[i].id);
+          });
+        }
+      });
     }
   }
   // query:
-  return res.redirect('./getInfo?id='+req.query.id);
+
 });
 
 module.exports = router;
