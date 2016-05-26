@@ -30,11 +30,6 @@ var data = [
   {id: 21, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
   {id: 22, date: '2016-05-25',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
 ];
-var log = [
-  {id: 0, modifyTime: '2016-01-10', msg: '买家付款金额: 100元 -> 400元'},
-  {id: 1, modifyTime: '2016-01-11', msg: '卖家收款金额: 100元 -> 400元'},
-  {id: 2, modifyTime: '2016-01-12', msg: '订单状态修改: 已付款 -> 未付款'},
-];
 
 var sqlSet =  {
   auditUser: "select Password_md5, Salt from managers where AccountName = ? and ManagerType = 3",
@@ -254,6 +249,7 @@ router.post('/getInfo', function(req, res, next) {
       if (req.body.a2s)
         data[i].a2s = req.body.a2s;
       infoData = data[i];
+      
     }
   }
   // query:
