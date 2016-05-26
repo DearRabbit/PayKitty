@@ -28,12 +28,12 @@
               <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <div class="col-md-4">
-                      <div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
-                        <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
-                        <span>April 26, 2016 - May 25, 2016</span> <b class="caret"></b>
-                      </div>
-                    </div>
+                    <!--<div class="col-md-4">-->
+                      <!--<div id="reportrange_right" class="pull-left" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">-->
+                        <!--<i class="glyphicon glyphicon-calendar fa fa-calendar"></i>-->
+                        <!--<span>April 26, 2016 - May 25, 2016</span> <b class="caret"></b>-->
+                      <!--</div>-->
+                    <!--</div>-->
                     <ul class="nav navbar-right panel_toolbox">
                       <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                       </li>
@@ -58,10 +58,10 @@
     <% include audit_footjs.ejs %>
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.11/js/dataTables.bootstrap.min.js"></script>
+    <script src="js/daterangepicker.js"></script>
     <!-- Datatables -->
     <script>
       $(document).ready(function() {
-        $("#datepicker").datepicker();
         $('#datatable').dataTable({
           language: {
             url: '//cdn.datatables.net/plug-ins/1.10.11/i18n/Chinese.json'
