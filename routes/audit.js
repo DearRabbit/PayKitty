@@ -244,6 +244,7 @@ router.post('/getInfo', function(req, res, next) {
   // change
   for (var i in data) {
     if (data[i].id == req.query.id) {
+      console.log()
       if (req.body.money) {
         msg += ("商品金额: " + data[i].money + "元 -> " + req.body.money + "元");
         data[i].money = req.body.money;
@@ -265,7 +266,7 @@ router.post('/getInfo', function(req, res, next) {
         }
 
         else {
-          conn.query(sqlSet.addAuditLog, [data[i].id, new Date(), msg], function(err,rows){
+          conn.query(sqlSet.addAuditLog, [req.query.id, new Date(), msg], function(err,rows){
             if (err) {
               console.log(err);
             }
@@ -274,7 +275,7 @@ router.post('/getInfo', function(req, res, next) {
             console.log(rows);
             conn.release();
 
-            return res.redirect('./getInfo?id='+data[i].id);
+            return res.redirect('./getInfo?id='+req.query.id);
           });
         }
       });
