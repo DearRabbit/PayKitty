@@ -1,35 +1,11 @@
 var express = require('express');
 var path = require('path');
-var http = require('http');
+var request = require("request");
 
 var conn = require('../database/connect');
 var router = express.Router();
 
-var data = [
-  {id: 0, date: '2016-05-18',buyer: 'buy01', seller: 'sell01', status: '未发货', money: 10.02, b2a: 10.02, a2s: 10.02},
-  {id: 1, date: '2016-05-18',buyer: 'buy02', seller: 'sell01', status: '已发货', money: 9999.99, b2a: 9999.99, a2s: 9999.99},
-  {id: 2, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 3, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 4, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 5, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 6, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 7, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 8, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 9, date: '2016-05-18',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 10, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 11, date: '2016-05-19',buyer: 'buy02', seller: 'sell01', status: '已发货', money: 9999.99, b2a: 9999.99, a2s: 9999.99},
-  {id: 12, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 1.01, a2s: 0.01},
-  {id: 13, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 1.01},
-  {id: 14, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 15, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 16, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 17, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 18, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 19, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 20, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 21, date: '2016-05-19',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-  {id: 22, date: '2016-05-25',buyer: 'buy02', seller: 'sell02', status: '已收货', money: 0.01, b2a: 0.01, a2s: 0.01},
-];
+var data = [];
 
 var sqlSet =  {
   auditUser: "select Password_md5, Salt from managers where AccountName = ? and ManagerType = 3",
@@ -39,15 +15,44 @@ var sqlSet =  {
   addAuditLog: "insert into modifyLog values(?, ?, ?)",
 };
 
-var limit = 5000;
+var limit = 4000;
 var startTimeFix = '00:00:00';
 var endTimeFix = '23:59:59';
 
-function presentation(data) {
-  data[0] += 1;
-  return data;
+function presentation() {
+  var options = { url: 'http://localhost/a2/api/getorderlistbydate?start=2010-01-01%2000%3A00%3A00&end=2017-01-01%2023%3A59%3A59'};
+  request.get(options, function(err,httpResponse,body){
+    if (!err) {
+      var orderlist = JSON.parse(body).orderIdList;
+      for (var i in orderlist) {
+        data[i] = {
+          id: orderlist[i].orderID,
+          date : orderlist[i].orderTime.split(" ")[0],
+          buyer : orderlist[i].buyer,
+          seller : orderlist[i].seller,
+          money : orderlist[i].orderAmount,
+          b2a : orderlist[i].orderAmount,
+          a2s : orderlist[i].orderAmount,
+          status : "已收货",
+        }
+      }
+    }
+  });
 }
 
+function validate() {
+  for (var i in data) {
+    if (data[i].b2a != data[i].money || data[i].a2s != data[i].money) {
+      data[i].audit = "错误";
+    }
+    else if (data[i].money > limit) {
+      data[i].audit = "警告";
+    }
+    else {
+      data[i].audit = "正常";
+    }
+  }
+}
 Date.prototype.format = function(format)
 {
   var o =
@@ -69,6 +74,12 @@ Date.prototype.format = function(format)
 }
 
 router.use(express.static(path.join(__dirname, '../public')));
+router.use(function(req, res, next) {
+  if (!req.session.auditUser && req.url != "/login") {
+    return res.redirect('./login');
+  }
+  next();
+});
 
 router.get('/login', function(req, res, next) {
   var loginFailFlag = false;
@@ -119,29 +130,16 @@ router.get('/logout', function(req, res) {
 router.get('/home', function(req, res, next) {
   var d = new Date();
   d.setDate(d.getDate()-1);
-  var localstring = d.format("yyyy-MM-dd");
+  var localstring = d.format("yyyy-MM-dd ");
   var startTime = localstring + startTimeFix;
   var endTime = localstring + endTimeFix;
 
-  // for (var i in data) {
-  //   data[i].b2a = data[i].orderAmount;
-  //   data[i].a2s = data[i].orderAmount;
-  // }
-  // presentation(data);
+  presentation();
+  validate();
 
   var localdata = [];
   var cnt = 0;
   for (var i in data){
-    if (data[i].b2a != data[i].money || data[i].a2s != data[i].money) {
-      data[i].audit = "错误";
-    }
-    else if (data[i].money > limit) {
-      data[i].audit = "警告";
-    }
-    else {
-      data[i].audit = "正常";
-    }
-
     if (data[i].date == localstring){
       localdata[cnt] = data[i];
       cnt ++;
@@ -152,6 +150,7 @@ router.get('/home', function(req, res, next) {
 });
 
 router.get('/archive', function(req, res, next) {
+  validate();
   res.render('audit_archive', { title: 'Archive', username: req.session.auditUser, data: data } );
 });
 
@@ -281,8 +280,6 @@ router.post('/getInfo', function(req, res, next) {
       });
     }
   }
-  // query:
-
 });
 
 module.exports = router;
