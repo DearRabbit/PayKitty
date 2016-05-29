@@ -111,6 +111,7 @@ router.post('/login', function(req, res, next) {
 
         if(loginFailFlag){
           req.session.auditUser = req.body.username;
+          presentation();
           return res.redirect('./home');
         } else {
           req.session.auditLoginFail = true;
@@ -134,7 +135,6 @@ router.get('/home', function(req, res, next) {
   var startTime = localstring + startTimeFix;
   var endTime = localstring + endTimeFix;
 
-  presentation();
   validate();
 
   var localdata = [];
