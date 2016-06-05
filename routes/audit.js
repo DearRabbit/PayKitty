@@ -34,7 +34,7 @@ function presentation() {
           money : orderlist[i].orderAmount,
           b2a : orderlist[i].orderAmount,
           a2s : orderlist[i].orderAmount,
-          item : orderlist[i].orderItems.items,
+          item : JSON.parse(orderlist[i].orderItems),
           status : "已收货",
         }
       }
@@ -58,7 +58,7 @@ function validate() {
     }
     else {
       data[i].audit = "正常";
-      data[i].warning = null;
+      data[i].warning = "";
     }
   }
 }
