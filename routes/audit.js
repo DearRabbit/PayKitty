@@ -46,7 +46,7 @@ function validate() {
   for (var i in data) {
     if (data[i].b2a != data[i].money || data[i].a2s != data[i].money) {
       data[i].audit = "错误";
-      data[i].warning = "金额不等"
+      data[i].warning = "金额不等";
     }
     else if (data[i].money > limit ) {
       data[i].audit = "警告";
