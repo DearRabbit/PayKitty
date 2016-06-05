@@ -45,22 +45,18 @@
                   <form action="" class="form-horizontal form-label-left" method="post">
 
                     <div class="form-group">
-                      <label class="control-label col-md-3 col-sm-3 col-xs-12">金额下限</label>
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">警告金额设置</label>
                       <div class="col-md-6 col-sm-6 col-xs-12">
-                        <input name="min" type="text" class="form-control" placeholder="<%= minValue%>" <%if (minValue<0){%>disabled="disabled"<%}%>>
+                        <input name="min" type="text" class="form-control" placeholder="<%= minValue%>" >
                       </div>
                     </div>
 
-                    <!--<div class="form-group">-->
-                      <!--<label class="control-label col-md-3 col-sm-3 col-xs-12">金额过大检查</label>-->
-                      <!--<div class="col-md-6 col-sm-6 col-xs-12">-->
-                        <!--<div class="">-->
-                          <!--<label>-->
-                            <!--<input name="" type="checkbox" class="js-switch" <if (minValue>=0){>checked<}> />-->
-                          <!--</label>-->
-                        <!--</div>-->
-                      <!--</div>-->
-                    <!--</div>-->
+                    <div class="form-group">
+                      <label class="control-label col-md-3 col-sm-3 col-xs-12">警告商品数量设置</label>
+                      <div class="col-md-6 col-sm-6 col-xs-12">
+                        <input name="maxItem" type="text" class="form-control" placeholder="<%= maxItem%>" >
+                      </div>
+                    </div>
 
                     <div class="ln_solid"></div>
                     <div class="form-group">

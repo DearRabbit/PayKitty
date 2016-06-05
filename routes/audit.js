@@ -16,11 +16,12 @@ var sqlSet =  {
 };
 
 var limit = 4000;
+var itemMax = 100;
 var startTimeFix = '00:00:00';
 var endTimeFix = '23:59:59';
 
 function presentation() {
-  var options = { url: 'http://localhost/a2/api/getorderlistbydate?start=2010-01-01%2000%3A00%3A00&end=2017-01-01%2023%3A59%3A59'};
+  var options = { url: 'http://121.42.175.1/a2/api/getorderlistbydate?start=2010-01-01%2000%3A00%3A00&end=2017-01-01%2023%3A59%3A59'};
   request.get(options, function(err,httpResponse,body){
     if (!err) {
       var orderlist = JSON.parse(body).orderIdList;
@@ -33,6 +34,7 @@ function presentation() {
           money : orderlist[i].orderAmount,
           b2a : orderlist[i].orderAmount,
           a2s : orderlist[i].orderAmount,
+          item : orderlist[i].orderItems.items,
           status : "已收货",
         }
       }
@@ -44,12 +46,19 @@ function validate() {
   for (var i in data) {
     if (data[i].b2a != data[i].money || data[i].a2s != data[i].money) {
       data[i].audit = "错误";
+      data[i].warning = "金额不等"
     }
-    else if (data[i].money > limit) {
+    else if (data[i].money > limit ) {
       data[i].audit = "警告";
+      data[i].warning = "金额过大";
+    }
+    else if (data[i].item.length > itemMax ) {
+      data[i].audit = "警告";
+      data[i].warning = "商品数量过多";
     }
     else {
       data[i].audit = "正常";
+      data[i].warning = null;
     }
   }
 }
@@ -125,6 +134,7 @@ router.post('/login', function(req, res, next) {
 
 router.get('/logout', function(req, res) {
   req.session.auditUser = null;
+  data = [];
   return res.redirect('./login');
 });
 
@@ -201,20 +211,14 @@ router.get('/profile', function(req, res, next) {
 });
 
 router.get('/settings', function(req, res, next) {
-  var placeholder = limit;
-  if (placeholder < 0) {
-    minValue = -1;
-  } else {
-    minValue = placeholder;
-  }
-  res.render('audit_settings', { title: 'Settings', username: req.session.auditUser, minValue: minValue} );
+  res.render('audit_settings', { title: 'Settings', username: req.session.auditUser, minValue: limit, maxItem: itemMax} );
 });
 
 router.post('/settings', function(req, res, next) {
   if (req.body.min)
     limit = req.body.min;
-  else
-    limit = 1;
+  if (req.body.maxItem)
+    itemMax = req.body.maxItem;
   return res.redirect('./settings');
 });
 
@@ -223,15 +227,6 @@ router.get('/getInfo', function(req, res, next) {
   for (var i in data) {
     if (data[i].id == req.query.id) {
       infoData = data[i];
-      if (infoData.b2a != infoData.money || infoData.a2s != infoData.money) {
-        infoData.auditInfo = "错误: 金额不等";
-      }
-      else if (infoData.money > limit) {
-        infoData.auditInfo = "警告: 金额过大";
-      }
-      else {
-        infoData.auditInfo = "正常";
-      }
     }
   }
   res.render('audit_info', { title: 'Settings', username: req.session.auditUser, info: infoData} );
@@ -243,7 +238,6 @@ router.post('/getInfo', function(req, res, next) {
   // change
   for (var i in data) {
     if (data[i].id == req.query.id) {
-      console.log()
       if (req.body.money) {
         msg += ("商品金额: " + data[i].money + "元 -> " + req.body.money + "元");
         data[i].money = req.body.money;
