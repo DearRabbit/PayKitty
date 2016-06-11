@@ -50,7 +50,7 @@
                       <tbody>
                       <% for (var i in data) { %>
                       <tr>
-                        <td><a href="getInfo?id=<%= data[i].id %>"><%= data[i].id %></a></td>
+                        <td><%= data[i].id %></a></td>
                         <td><%= data[i].modifyTime.format("yyyy-MM-dd hh:mm:ss") %></td>
                         <td><%= data[i].message %></td>
                       </tr>
