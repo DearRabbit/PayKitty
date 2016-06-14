@@ -258,7 +258,7 @@ router.post('/getInfo', function(req, res, next) {
           console.log("POOL ==> " + err);
         }
 
-        else {
+        else if (msg != "") {
           conn.query(sqlSet.addAuditLog, [req.query.id, new Date(), msg], function(err,rows){
             if (err) {
               console.log(err);
