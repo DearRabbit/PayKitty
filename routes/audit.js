@@ -108,14 +108,14 @@ router.post('/login', function(req, res, next) {
 
     else {
       conn.query(sqlSet.auditUser, [req.body.username], function(err,rows){
-        if (err) {
+	if (err) {
           console.log(err);
         }
         // TODO: fix validation
-        else if (rows && rows[0].Password_md5 == req.body.password) {
+        else if (rows[0] && rows[0].Password_md5 == req.body.password) {
           loginFailFlag = true;
         }
-        console.log(rows);
+	console.log(rows);
         conn.release();
 
         if(loginFailFlag){
