@@ -5,3 +5,25 @@
 <!-- Custom Theme Scripts -->
 <script src="js/custom.js"></script>
 <script>function audit_help() {alert('No help currently.');}</script>
+<script>function post_amount()
+    {
+        var orderid = $("input[name='id']").attr('placeholder');
+        var smoney = $("input[name='money']");
+        var sb2a = $("input[name='b2a']");
+        var sa2s = $("input[name='a2s']");
+        var origin_amount = smoney.attr('placeholder');
+        var current_amount = smoney.val();
+
+        if (current_amount != "" && !isNaN(current_amount)) {
+            $.post('http://121.42.175.1/a2/api/updateorderamount', {orderID: orderid, amount: current_amount});
+            alert("修改成功");
+        }
+
+        if (sb2a.attr('placeholder') != sb2a.val()) {
+            alert("修改成功");
+        }
+
+        if (sa2s.attr('placeholder') != sa2s.val()) {
+            alert("修改成功");
+        }
+    }</script>
