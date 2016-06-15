@@ -15,7 +15,7 @@ var sqlSet =  {
   addAuditLog: "insert into modifyLog values(?, ?, ?)",
 };
 
-var state = ["待付款", "待商家确认", "已发货", "已收货", "交易关闭", "待退款", "已退款", "退款失败"];
+var state = ["待付款", "待商家确认", "已发货", "交易成功", "交易关闭", "待退款", "已退款", "退款失败"];
 
 var limit = 4000;
 var itemMax = 100;
