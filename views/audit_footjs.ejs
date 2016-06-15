@@ -15,7 +15,12 @@
         var current_amount = smoney.val();
 
         if (current_amount != "" && !isNaN(current_amount)) {
-            $.post('http://121.42.175.1/a2/api/updateorderamount', {orderID: orderid, amount: current_amount});
+            $.ajax({
+                type: 'POST',
+                url: "http://121.42.175.1/a2/api/updateorderamount",
+                data: JSON.stringify({orderID: 4, amount: 25}),
+                contentType: "application/json; charset=utf-8",
+            });
             alert("修改成功");
         }
 
