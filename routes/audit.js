@@ -28,7 +28,7 @@ function presentation() {
       for (var i in orderlist) {
         data[i] = {
           id: orderlist[i].orderID,
-          date : orderlist[i].orderTime.split(" ")[0],
+          date : orderlist[i].orderTime,
           buyer : orderlist[i].buyer,
           seller : orderlist[i].seller,
           money : orderlist[i].orderAmount,
@@ -150,7 +150,7 @@ router.get('/home', function(req, res, next) {
   var localdata = [];
   var cnt = 0;
   for (var i in data){
-    if (data[i].date == localstring){
+    if (data[i].date.split(" ")[0] == localstring){
       localdata[cnt] = data[i];
       cnt ++;
     }
