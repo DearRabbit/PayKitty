@@ -15,6 +15,8 @@ var sqlSet =  {
   addAuditLog: "insert into modifyLog values(?, ?, ?)",
 };
 
+var state = ["待付款", "待商家确认", "已发货", "已收货", "交易关闭", "待退款", "已退款", "退款失败"];
+
 var limit = 4000;
 var itemMax = 100;
 var startTimeFix = '00:00:00';
@@ -35,7 +37,7 @@ function presentation() {
           b2a : orderlist[i].orderAmount,
           a2s : orderlist[i].orderAmount,
           item : JSON.parse(orderlist[i].orderItems),
-          status : "已收货",
+          status : state[orderlist[i].orderStatus],
         }
       }
     }

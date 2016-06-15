@@ -23,7 +23,7 @@
     <td <% if (data[i].audit == "警告") {%>
       style="background:#FDFBAF;" <%} else if (data[i].audit == "错误") {%>
       style="background:#EE6D66;" <%}%>>
-      <%= data[i].audit %>
+      <%= data[i].audit + data[i].warning %>
     </td>
   </tr>
   <% } %>
