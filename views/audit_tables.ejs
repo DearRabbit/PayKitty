@@ -4,6 +4,7 @@
     <th>订单号</th>
     <th>买家ID</th>
     <th>卖家ID</th>
+    <th>交易时间</th>
     <th>订单状态</th>
     <th>交易金额</th>
     <th>审核状态</th>
@@ -16,6 +17,7 @@
     <td><a href="getInfo?id=<%= data[i].id %>"><%= data[i].id %></a></td>
     <td><%= data[i].buyer %></td>
     <td><%= data[i].seller %></td>
+    <td><%= data[i].date %></td>
     <td><%= data[i].status %></td>
     <td><%= data[i].money %></td>
     <td <% if (data[i].audit == "警告") {%>
