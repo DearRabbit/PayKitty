@@ -160,7 +160,7 @@ router.get('/logout', function(req, res) {
 router.get('/home', function(req, res, next) {
   var d = new Date();
   d.setDate(d.getDate()-1);
-  var localstring = d.format("yyyy-MM-dd ");
+  var localstring = d.format("yyyy-MM-dd");
   var startTime = localstring + startTimeFix;
   var endTime = localstring + endTimeFix;
 
