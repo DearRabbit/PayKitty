@@ -34,10 +34,22 @@ function presentation() {
           buyer : orderlist[i].buyer,
           seller : orderlist[i].seller,
           money : orderlist[i].orderAmount,
-          b2a : orderlist[i].orderAmount,
-          a2s : orderlist[i].orderAmount,
           item : JSON.parse(orderlist[i].orderItems),
           status : state[orderlist[i].orderStatus],
+        }
+        switch (orderlist[i].orderStatus) {
+          case 0: case 6:
+            data[i].b2a = 0;
+            data[i].a2s = 0;
+            break;
+          case 1: case 2:
+            data[i].b2a = orderlist[i].orderAmount;
+            data[i].a2s = 0;
+            break;
+          default:
+            data[i].b2a = orderlist[i].orderAmount;
+            data[i].a2s = orderlist[i].orderAmount;
+            break;
         }
       }
     }
@@ -46,7 +58,11 @@ function presentation() {
 
 function validate() {
   for (var i in data) {
-    if (data[i].b2a != data[i].money || data[i].a2s != data[i].money) {
+    if (data[i].b2a != data[i].money || (data[i].status != state[0] && data[i].status != state[6])) {
+      data[i].audit = "错误";
+      data[i].warning = "金额不等";
+    }
+    else if (data[i].a2s != data[i].money || (data[i].status != state[1] && data[i].status != state[2])) {
       data[i].audit = "错误";
       data[i].warning = "金额不等";
     }
