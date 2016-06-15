@@ -58,11 +58,11 @@ function presentation() {
 
 function validate() {
   for (var i in data) {
-    if (data[i].b2a != data[i].money || (data[i].status != state[0] && data[i].status != state[6])) {
+    if (data[i].b2a != data[i].money && (data[i].status != state[0] && data[i].status != state[6])) {
       data[i].audit = "错误";
       data[i].warning = "金额不等";
     }
-    else if (data[i].a2s != data[i].money || (data[i].status != state[1] && data[i].status != state[2])) {
+    else if (data[i].a2s != data[i].money && (data[i].status != state[1] && data[i].status != state[2])) {
       data[i].audit = "错误";
       data[i].warning = "金额不等";
     }
